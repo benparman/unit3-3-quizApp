@@ -71,9 +71,9 @@ const questionDatabase =
 //*******************
 
 const STORE = {
-  currentQuestion: 1,
-  questionCounter: 1,
-  correctCounter: 1,
+  currentQuestion: 0,
+  questionCounter: 0,
+  correctCounter: 0,
   userAnswer: ''
 }
 
@@ -86,6 +86,7 @@ const STORE = {
 function generateQuestionPage() {
   let questionIndex = STORE.currentQuestion;
   let answers = questionDatabase[questionIndex].possibleAnswers;
+  STORE.questionCounter++;
 
   return `<div>
     <div class = "questions-answered">
@@ -111,14 +112,23 @@ function generateQuestionPage() {
           <br>
         </div>
         <div class="user-input">
-            <button name= "submit-button" id= "answer-submit-button" class= "input-button" type= "submit" >Submit Answer</button>
+            <button name= "submit-button" id= "js-answer-submit-button" class= "input-button" type= "submit" >Submit Answer</button>
         </div>
         <div class= "current-score">
-            <p>Current score: ${STORE.score}</p>
+            <p>Current score: ${STORE.correctCounter}</p>
         </div>
     </form>
-  </div>>`
+  </div>`
   ;
+}
+
+function generateAnswerFeedback() {
+  if (STORE.userAnswer === questionDatabase[STORE.currentQuestion].correctAnswer) {
+    return; //WRITE HTML FOR CORRECT ANSWER FEEDBACK HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  }
+  else {
+    return; //WRITE HTML FOR NOT-CORRECT ANSWER FEEDBACK HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  }
 }
 
 function generateStartPage() {
@@ -139,6 +149,11 @@ function renderQuestionView() {
   $('.js-content').html(questionView)
 }
 
+function renderAnswerFeedback() {
+  let answerView = generateAnswerFeedback();
+  $('.js-content').html(answerView)
+}
+
 function renderStart () {
   $('#js-content').html(generateStartPage());
 }
@@ -153,8 +168,27 @@ function handleUserInputs(){
   $('.js-content').on('click', '#js-startButton', event => {
     renderQuestionView();
   })
+  $('.js-content').on('click', '#js-answer-submit-button', event => {
+    event.preventDefault();
+    //update userAnswer in STORE to the user's answer choice
+    STORE.userAnswer = $('input[type=radio][name=answer]:checked').val();
 
+    //Ensure that user has made a selection
+    if (!('input[name = \'answer\']').is(';checked')) {
+      alert('You must select an answer from the list!');
+    }
+    //check to see if user answer === correct answer
+    if (STORE.userAnswer === questionDatabase[STORE.currentQuestion].correctAnswer) {
+      STORE.correctCounter++;
+      renderAnswerFeedback();
+    }
+    else {
+      renderAnswerFeedback();
+    }
+  })
 }
+
+
 
 //*******************
 //*******************
