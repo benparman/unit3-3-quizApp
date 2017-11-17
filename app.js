@@ -71,9 +71,9 @@ const questionDatabase =
 //*******************
 
 const STORE = {
-  currentQuestion: 0,
-  questionCounter: 0,
-  correctCounter: 0,
+  currentQuestion: 1,
+  questionCounter: 1,
+  correctCounter: 1,
   userAnswer: ''
 }
 
@@ -85,40 +85,40 @@ const STORE = {
 
 function generateQuestionPage() {
   let questionIndex = STORE.currentQuestion;
-  let answers = questionDatabase[questionIndex].answers;
+  let answers = questionDatabase[questionIndex].possibleAnswers;
 
   return `<div>
-  <h1>The MTB Tech Quiz</h1>
-  <div class = "questions-answered">
-    <p>Question ${STORE.questionCounter}</p>
-  </div>
-  <form>
-    <h3>${questionDatabase[currentQuestion].question}</h3>
-      <div>
-        <input type = "radio" id = "${answers[0]}" name = "answer" value = "${answers[0]}">
-        <label for = "${answers[0]}">${answers[0]}</label>
-        <br>
-        <input type = "radio" id = "${answers[1]}" name = "answer" value = "${answers[1]}">
-        <label for = "${answers[1]}">${answers[1]}</label>
-        <br>
-        <input type = "radio" id = "${answers[2]}" name = "answer" value = "${answers[2]}">
-        <label for = "${answers[2]}">${answers[2]}</label>
-        <br>
-        <input type = "radio" id = "${answers[3]}" name = "answer" value = "${answers[3]}">
-        <label for = "${answers[3]}">${answers[3]}</label>
-        <br>
-        <input type = "radio" id = "${answers[4]}" name = "answer" value = "${answers[4]}">
-        <label for = "${answers[4]}">${answers[4]}</label>
-        <br>
-      </div>
-      <div class="user-input">
-          <button name= "submit-button" id= "answer-submit-button" class= "input-button" type= "submit" >Submit Answer</button>
-      </div>
-      <div class= "current-score">
-          <p>Current score: ${STORE.score}</p>
-      </div>
-  </form>
-</div>>`
+    <div class = "questions-answered">
+      <p>Question ${STORE.questionCounter}</p>
+    </div>
+    <form>
+      <h3>${questionDatabase[questionIndex].question}</h3>
+        <div>
+          <input type = "radio" id = "${answers[0]}" name = "answer" value = "${answers[0]}">
+          <label for = "${answers[0]}">${answers[0]}</label>
+          <br>
+          <input type = "radio" id = "${answers[1]}" name = "answer" value = "${answers[1]}">
+          <label for = "${answers[1]}">${answers[1]}</label>
+          <br>
+          <input type = "radio" id = "${answers[2]}" name = "answer" value = "${answers[2]}">
+          <label for = "${answers[2]}">${answers[2]}</label>
+          <br>
+          <input type = "radio" id = "${answers[3]}" name = "answer" value = "${answers[3]}">
+          <label for = "${answers[3]}">${answers[3]}</label>
+          <br>
+          <input type = "radio" id = "${answers[4]}" name = "answer" value = "${answers[4]}">
+          <label for = "${answers[4]}">${answers[4]}</label>
+          <br>
+        </div>
+        <div class="user-input">
+            <button name= "submit-button" id= "answer-submit-button" class= "input-button" type= "submit" >Submit Answer</button>
+        </div>
+        <div class= "current-score">
+            <p>Current score: ${STORE.score}</p>
+        </div>
+    </form>
+  </div>>`
+  ;
 }
 
 function generateStartPage() {
@@ -135,7 +135,8 @@ function generateStartPage() {
 //*******************
 
 function renderQuestionView() {
-  $('.js-content').html(generateQuestionPage())
+  let questionView = generateQuestionPage();
+  $('.js-content').html(questionView)
 }
 
 function renderStart () {
