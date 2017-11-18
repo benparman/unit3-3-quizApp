@@ -23,7 +23,7 @@ const questionDatabase =
     correctAnswer: '142mm Thru-Axle',
     possibleAnswers: [
       '142mm Thru-Axle',
-      '200possibleAnswersmm Traxle -Bolt',
+      '200mm Traxle -Bolt',
       'The english threaded reverse bolt',
       'Boost 148',
       'BSA Tapered Spindle'
@@ -75,7 +75,7 @@ const STORE = {
   questionCounter: 0,
   correctCounter: 0,
   userAnswer: ''
-}
+};
 
 //*******************
 //*******************
@@ -87,7 +87,6 @@ function generateQuestionPage() {
   let questionIndex = STORE.currentQuestion;
   let answers = questionDatabase[questionIndex].possibleAnswers;
   STORE.questionCounter++;
-
   return `<div>
     <div class = "questions-answered">
       <p>Question ${STORE.questionCounter}</p>
@@ -118,24 +117,83 @@ function generateQuestionPage() {
             <p>Current score: ${STORE.correctCounter}</p>
         </div>
     </form>
-  </div>`
-  ;
+  </div>`;
 }
 
 function generateAnswerFeedback() {
-  if (STORE.userAnswer === questionDatabase[STORE.currentQuestion].correctAnswer) {
-    return; //WRITE HTML FOR CORRECT ANSWER FEEDBACK HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  let questionIndex = STORE.currentQuestion;
+  let nextButton = '';
+  let buttonID = '';
+  if (STORE.questionCounter < questionDatabase.length) {
+    nextButton = 'Next Question';
+    buttonID = 'js-next-question-button';
   }
   else {
-    return; //WRITE HTML FOR NOT-CORRECT ANSWER FEEDBACK HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    nextButton = 'Show Results';
+    buttonID = 'js-show-results-button';
   }
+
+  if (STORE.userAnswer === questionDatabase[STORE.currentQuestion].correctAnswer) {
+    return `<div>
+    <div class = "questions-answered">
+      <p>Question ${STORE.questionCounter}</p>
+    </div>
+    <form>
+      <h3>${questionDatabase[questionIndex].question}</h3>
+        <div>
+          <h4>You are correct!</h4>
+          <h5>${STORE.userAnswer}</h5>
+        </div>
+        <div class="user-input">
+            <button name= "next-button" id= "${buttonID}" class= "input-button" type= "submit" >${nextButton}</button>
+        </div>
+        <div class= "current-score">
+            <p>Current score: ${STORE.correctCounter}</p>
+        </div>
+    </form>
+  </div>`;
+  }
+  else {
+    return `<div>
+    <div class = "questions-answered">
+      <p>Question ${STORE.questionCounter}</p>
+    </div>
+    <form>
+      <h3>${questionDatabase[questionIndex].question}</h3>
+        <div>
+          <h4>Sorry, you are incorrect!  The correct answer is:</h4>
+          <h5>${questionDatabase[questionIndex].correctAnswer}</h5>
+        </div>
+        <div class="user-input">
+            <button name= "next-button" id= "${buttonID}" class= "input-button" type= "submit" >${nextButton}</button>
+        </div>
+        <div class= "current-score">
+            <p>Current score: ${STORE.correctCounter}</p>
+        </div>
+    </form>
+  </div>`;
+  }
+}
+
+function generateSummaryView() {
+  return `<div>
+  <form>
+    <h3>Finished!  You scored ${STORE.correctCounter} out of ${STORE.questionCounter}.</h3>
+      <div>
+        <h4>Want to take the quiz again?  Click the "Restart Quiz" button below!</h4>
+      </div>
+      <div class="user-input">
+          <button name= "next-button" id= "js-quiz-restart-button" class= "input-button" type= "submit" >Restart Quiz</button>
+      </div>
+  </form>
+</div>`;
 }
 
 function generateStartPage() {
   return `<div>
   <h3 id = "js-subTitle">Are you a MTB gearhead?  Click the Start Quiz button below to find out.</h3>
   <button id = "js-startButton">Start Quiz</button>
-</div>`
+</div>`;
 }
 
 //*******************
@@ -146,17 +204,23 @@ function generateStartPage() {
 
 function renderQuestionView() {
   let questionView = generateQuestionPage();
-  $('.js-content').html(questionView)
+  $('.js-content').html(questionView);
 }
 
 function renderAnswerFeedback() {
   let answerView = generateAnswerFeedback();
-  $('.js-content').html(answerView)
+  $('.js-content').html(answerView);
 }
 
-function renderStart () {
-  $('#js-content').html(generateStartPage());
+function renderSummaryView() {
+  let summaryView = generateSummaryView();
+  $('.js-content').html(summaryView);
 }
+
+// function renderStart () {
+//   let startView = generateStartPage();
+//   $('#js-content').html(startView);
+// }
 
 //*******************
 //*******************
@@ -166,15 +230,16 @@ function renderStart () {
 //call rendering functions inside of handleUserInputs() function
 function handleUserInputs(){
   $('.js-content').on('click', '#js-startButton', event => {
+    event.preventDefault();
     renderQuestionView();
-  })
+  });
   $('.js-content').on('click', '#js-answer-submit-button', event => {
     event.preventDefault();
     //update userAnswer in STORE to the user's answer choice
     STORE.userAnswer = $('input[type=radio][name=answer]:checked').val();
 
     //Ensure that user has made a selection
-    if (!('input[name = \'answer\']').is(';checked')) {
+    if (!$('input[name=\'answer\']').is(':checked')) { 
       alert('You must select an answer from the list!');
     }
     //check to see if user answer === correct answer
@@ -185,7 +250,18 @@ function handleUserInputs(){
     else {
       renderAnswerFeedback();
     }
-  })
+  });
+  $('.js-content').on('click', '#js-next-question-button', event => {
+    event.preventDefault();
+    STORE.currentQuestion++;
+    if (STORE.questionCounter < questionDatabase.length) {
+      renderQuestionView();
+    }
+    $('.js-content').on('click', '#js-show-results-button', event => {
+      event.preventDefault();
+      renderSummaryView();
+    });
+  }); 
 }
 
 
@@ -199,3 +275,4 @@ function handleUserInputs(){
 $(function(){
   handleUserInputs();
 });
+
