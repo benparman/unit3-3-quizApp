@@ -1,10 +1,9 @@
 'use strict';
 
 //*******************
-//*******************
 //Question Database
 //*******************
-//*******************
+
 const questionDatabase = 
 [
   {
@@ -65,9 +64,7 @@ const questionDatabase =
 ];
 
 //*******************
-//*******************
 //STORE
-//*******************
 //*******************
 
 const STORE = {
@@ -78,9 +75,7 @@ const STORE = {
 };
 
 //*******************
-//*******************
 //Template Generators
-//*******************
 //*******************
 
 function generateQuestionPage() {
@@ -190,16 +185,14 @@ function generateSummaryView() {
 }
 
 function generateStartPage() {
-  return `<div>
+  return `    <div>
   <h3 id = "js-subTitle">Are you a MTB gearhead?  Click the Start Quiz button below to find out.</h3>
   <button id = "js-startButton">Start Quiz</button>
 </div>`;
 }
 
 //*******************
-//*******************
 //HTML Renderers
-//*******************
 //*******************
 
 function renderQuestionView() {
@@ -217,22 +210,22 @@ function renderSummaryView() {
   $('.js-content').html(summaryView);
 }
 
-// function renderStart () {
-//   let startView = generateStartPage();
-//   $('#js-content').html(startView);
-// }
+function renderStart () {
+  let startView = generateStartPage();
+  $('.js-content').html(startView);
+}
 
-//*******************
 //*******************
 //Event Handlers
 //*******************
-//*******************
+
 //call rendering functions inside of handleUserInputs() function
 function handleUserInputs(){
   $('.js-content').on('click', '#js-startButton', event => {
     event.preventDefault();
     renderQuestionView();
   });
+  
   $('.js-content').on('click', '#js-answer-submit-button', event => {
     event.preventDefault();
     //update userAnswer in STORE to the user's answer choice
@@ -251,6 +244,7 @@ function handleUserInputs(){
       renderAnswerFeedback();
     }
   });
+
   $('.js-content').on('click', '#js-next-question-button', event => {
     event.preventDefault();
     STORE.currentQuestion++;
@@ -261,16 +255,18 @@ function handleUserInputs(){
       event.preventDefault();
       renderSummaryView();
     });
+
+    $('.js-content').on('click', '#js-quiz-restart-button', event => {
+      event.preventDefault();
+      renderStart();
+    });
+
   }); 
 }
 
-
-
-//*******************
-//*******************
-//Run on page load
-//*******************
-//*******************
+//*********************************************
+//Run on page load + Initialize Event Listeners
+//*********************************************
 
 $(function(){
   handleUserInputs();
