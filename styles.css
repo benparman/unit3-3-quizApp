@@ -1,6 +1,8 @@
-html {
-  background-color: rgb(218, 218, 218);
-  margin: auto;
-  color: rgb(41, 0, 0);
-  position
-};
+header {
+  background-color: rgb(150, 98, 40);
+}
+
+.border {
+  border: 1px solid black;
+  background-color: green;
+}
