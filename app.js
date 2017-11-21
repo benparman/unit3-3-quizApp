@@ -84,7 +84,7 @@ function generateQuestionPage() {
   STORE.questionCounter++;
   return `<div>
     <div class = "questions-answered">
-      <p>Question ${STORE.questionCounter}</p>
+      <p>Question ${STORE.questionCounter} of ${questionDatabase.length}</p>
     </div>
     <form>
       <h3>${questionDatabase[questionIndex].question}</h3>
@@ -109,7 +109,7 @@ function generateQuestionPage() {
             <button name= "submit-button" id= "js-answer-submit-button" class= "input-button" type= "submit" >Submit Answer</button>
         </div>
         <div class= "current-score">
-            <p>Current score: ${STORE.correctCounter}</p>
+            <p>Current score: ${STORE.correctCounter} of ${questionDatabase.length}</p>
         </div>
     </form>
   </div>`;
@@ -143,7 +143,7 @@ function generateAnswerFeedback() {
             <button name= "next-button" id= "${buttonID}" class= "input-button" type= "submit" >${nextButton}</button>
         </div>
         <div class= "current-score">
-            <p>Current score: ${STORE.correctCounter}</p>
+            <p>Current score: ${STORE.correctCounter} of ${questionDatabase.length}</p>
         </div>
     </form>
   </div>`;
@@ -163,7 +163,7 @@ function generateAnswerFeedback() {
             <button name= "next-button" id= "${buttonID}" class= "input-button" type= "submit" >${nextButton}</button>
         </div>
         <div class= "current-score">
-            <p>Current score: ${STORE.correctCounter}</p>
+            <p>Current score: ${STORE.correctCounter} of ${questionDatabase.length}</p>
         </div>
     </form>
   </div>`;
@@ -171,9 +171,10 @@ function generateAnswerFeedback() {
 }
 
 function generateSummaryView() {
+  let percentScore = (STORE.correctCounter/questionDatabase.length)*100;
   return `<div>
   <form>
-    <h3>Finished!  You scored ${STORE.correctCounter} out of ${STORE.questionCounter}.</h3>
+    <h3>Finished!  You scored ${STORE.correctCounter} out of ${STORE.questionCounter}.  That's ${percentScore}% correct.</h3>
       <div>
         <h4>Want to take the quiz again?  Click the "Restart Quiz" button below!</h4>
       </div>
@@ -185,6 +186,10 @@ function generateSummaryView() {
 }
 
 function generateStartPage() {
+  STORE.currentQuestion = 0;
+  STORE.questionCounter = 0;
+  STORE.correctCounter = 0;
+  STORE.userAnswer = '';
   return `    <div>
   <h3 id = "js-subTitle">Are you a MTB gearhead?  Click the Start Quiz button below to find out.</h3>
   <button id = "js-startButton">Start Quiz</button>
@@ -234,6 +239,7 @@ function handleUserInputs(){
     //Ensure that user has made a selection
     if (!$('input[name=\'answer\']').is(':checked')) { 
       alert('You must select an answer from the list!');
+      return;
     }
     //check to see if user answer === correct answer
     if (STORE.userAnswer === questionDatabase[STORE.currentQuestion].correctAnswer) {
