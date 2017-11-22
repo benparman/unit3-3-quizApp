@@ -190,7 +190,7 @@ function generateStartPage() {
   STORE.questionCounter = 0;
   STORE.correctCounter = 0;
   STORE.userAnswer = '';
-  return `<div class = "col-6">
+  return `<div class = "col-12">
   <h3 id = "js-subTitle">Are you a MTB gearhead?  Click the Start Quiz button below to find out.</h3>
   <div class = "col-3" "row">
     <button id = "js-startButton">Start Quiz</button>
@@ -278,5 +278,6 @@ function handleUserInputs(){
 
 $(function(){
   handleUserInputs();
+  renderStart();
 });
 
