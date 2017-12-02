@@ -78,6 +78,7 @@ const STORE = {
 //Template Generators
 //*******************
 
+//Generates html for question page
 function generateQuestionPage() {
   let questionIndex = STORE.currentQuestion;
   let answers = questionDatabase[questionIndex].possibleAnswers;
@@ -115,6 +116,7 @@ function generateQuestionPage() {
   </div>`;
 }
 
+//Generates html for answer feedback page
 function generateAnswerFeedback() {
   let questionIndex = STORE.currentQuestion;
   let nextButton = '';
@@ -128,6 +130,7 @@ function generateAnswerFeedback() {
     buttonID = 'js-show-results-button';
   }
 
+  //If/else statement provides different html dependend on whether answer was correct or not
   if (STORE.userAnswer === questionDatabase[STORE.currentQuestion].correctAnswer) {
     return `<div>
     <div class = "questions-answered">
@@ -170,6 +173,7 @@ function generateAnswerFeedback() {
   }
 }
 
+//Generates html for quiz summary view page
 function generateSummaryView() {
   let percentScore = (STORE.correctCounter/questionDatabase.length)*100;
   return `<div>
@@ -185,6 +189,7 @@ function generateSummaryView() {
 </div>`;
 }
 
+//Renders html to return quiz to it's initial state if user chooses to take the quiz again
 function generateStartPage() {
   STORE.currentQuestion = 0;
   STORE.questionCounter = 0;
@@ -228,11 +233,14 @@ function renderStart () {
 
 //call rendering functions inside of handleUserInputs() function
 function handleUserInputs(){
+
+  //Listens for user to click on the start quiz button
   $('.js-content').on('click', '#js-startButton', event => {
     event.preventDefault();
     renderQuestionView();
   });
   
+  //Listens for user to submit an answer
   $('.js-content').on('click', '#js-answer-submit-button', event => {
     event.preventDefault();
     //update userAnswer in STORE to the user's answer choice
@@ -243,7 +251,8 @@ function handleUserInputs(){
       alert('You must select an answer from the list!');
       return;
     }
-    //check to see if user answer === correct answer
+    //check to see if user answer === correct answer.  Increments 'correct counter' 
+    //in the STORE if answre is correct, and then renders the feedback page
     if (STORE.userAnswer === questionDatabase[STORE.currentQuestion].correctAnswer) {
       STORE.correctCounter++;
       renderAnswerFeedback();
@@ -253,17 +262,21 @@ function handleUserInputs(){
     }
   });
 
+  //Listens for user to click the next question button on the answer feedback page
   $('.js-content').on('click', '#js-next-question-button', event => {
     event.preventDefault();
     STORE.currentQuestion++;
     if (STORE.questionCounter < questionDatabase.length) {
       renderQuestionView();
     }
+
+    //Listens for user to click the show results button once all questions have been answered
     $('.js-content').on('click', '#js-show-results-button', event => {
       event.preventDefault();
       renderSummaryView();
     });
 
+    //Listens for user to click the restart quiz button on the quiz summary page
     $('.js-content').on('click', '#js-quiz-restart-button', event => {
       event.preventDefault();
       renderStart();
