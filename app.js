@@ -131,7 +131,7 @@ function generateAnswerFeedback() {
   if (STORE.userAnswer === questionDatabase[STORE.currentQuestion].correctAnswer) {
     return `<div>
     <div class = "questions-answered">
-      <p>Question ${STORE.questionCounter}</p>
+      <p>Question ${STORE.questionCounter} of ${questionDatabase.length}</p>
     </div>
     <form>
       <h3>${questionDatabase[questionIndex].question}</h3>
@@ -151,7 +151,7 @@ function generateAnswerFeedback() {
   else {
     return `<div>
     <div class = "questions-answered">
-      <p>Question ${STORE.questionCounter}</p>
+      <p>Question ${STORE.questionCounter} of ${questionDatabase.length}</p>
     </div>
     <form>
       <h3>${questionDatabase[questionIndex].question}</h3>
