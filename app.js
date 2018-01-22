@@ -89,7 +89,7 @@ function generateQuestionPage() {
     </div>
     <form>
       <h3>${questionDatabase[questionIndex].question}</h3>
-        <div>
+        <div role="group" aria-label = "answer">
           <input type = "radio" id = "${answers[0]}" name = "answer" value = "${answers[0]}">
           <label for = "${answers[0]}">${answers[0]}</label>
           <br>
